@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "model-optimization"
+version = "0.1.0"
+description = "Prepare and optimize a transformers-based PyTorch model for deployment."
+authors = ["Alex Cunliffe <alex@prolego.io>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+torch = "^1.10.2"
+onnxruntime = "^1.10.0"
+transformers = "^4.16.2"
+click = "^8.0.4"
+memory-profiler = "^0.60.0"
+scikit-learn = "^1.0.2"
+numpy = "^1.22.2"
+onnx = "^1.11.0"
+matplotlib = "^3.5.1"
+
+[tool.poetry.dev-dependencies]
+notebook = "^6.4.8"
+pytest = "^7.0.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
