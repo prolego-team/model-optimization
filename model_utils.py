@@ -59,6 +59,16 @@ def load_model(model_name, torchscript=False):
     return model
 
 
+def save_model_and_tokenizer(model_name: str, output_dirpath: str) -> None:
+    """
+    save a Hugging Face model and tokenizer to output_dirpath
+    """
+    model = load_model(model_name)
+    tokenizer = load_tokenizer(model_name)
+    model.save_pretrained(output_dirpath)
+    tokenizer.save_pretrained(output_dirpath)
+
+
 def onnx_load_model(onnx_model_filepath):
     """
     load ONNX model using onnxruntime
