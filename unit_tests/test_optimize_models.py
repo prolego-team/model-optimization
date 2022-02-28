@@ -31,3 +31,14 @@ def test_quantize_pytorch_model(model_name: str):
         model_name, model_name, output_dirpath)
     assert os.path.exists(os.path.join(output_dirpath, "model.pt"))
     shutil.rmtree(output_dirpath)
+
+
+@pytest.mark.usefixtures("model_name")
+def test_to_onnx(model_name: str):
+    """
+    test that a model called model.onnx is created in the output dir
+    """
+    output_dirpath = mkdtemp(dir="./")
+    optimize_models.to_onnx(model_name, output_dirpath)
+    assert os.path.exists(os.path.join(output_dirpath, "model.onnx"))
+    shutil.rmtree(output_dirpath)
