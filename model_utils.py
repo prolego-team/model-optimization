@@ -8,9 +8,6 @@ from typing import List
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import onnxruntime as rt
-import mxnet as mx
-from mxnet.contrib import onnx as onnx_mxnet
-from mxnet import gluon
 
 
 # datasets
@@ -69,27 +66,6 @@ def onnx_load_model(onnx_model_filepath):
     session = rt.InferenceSession(onnx_model_filepath)
     # time.sleep(0.4)
     return session
-
-
-def mxnet_load_model(onnx_model_path):
-    """
-    import model from ONNX to MXNet
-    See: https://mxnet.apache.org/versions/1.7/api/python/docs/tutorials/packages/onnx/inference_on_onnx_model.html
-    Note: This doesn't currently seem to work for transformers models because of unsupported data types
-    """
-    sym, arg_params, aux_params = onnx_mxnet.import_model(onnx_model_path)
-    ctx = mx.cpu()
-
-    net = gluon.nn.SymbolBlock(outputs=sym, inputs=mx.sym.var("data_0"))
-    net_params = net.collect_params()
-    for param in arg_params:
-        if param in net_params:
-            net_params[param]._load_init(arg_params[param], ctx=ctx)
-    for param in aux_params:
-        if param in net_params:
-            net_params[param]._load_init(aux_params[param], ctx=ctx)
-    net.hybridize()
-    return net
 
 
 def torchscript_load_model(torchscript_model_path: str):
