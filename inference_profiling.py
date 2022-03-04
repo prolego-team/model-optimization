@@ -3,14 +3,11 @@ profile RAM consumption during inference
 """
 
 import os
-from typing import List
 from tempfile import mkdtemp
 import shutil
 
 import click
-from torch.onnx import export
-from torch.serialization import load
-from transformers import AutoTokenizer, Trainer, TrainingArguments
+from transformers import Trainer, TrainingArguments
 from transformers.models.bert.tokenization_bert import PRETRAINED_VOCAB_FILES_MAP
 # from memory_profiler import profile  # NOTE: need to comment this out to use mprof plotting
 
