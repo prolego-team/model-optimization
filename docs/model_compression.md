@@ -65,7 +65,7 @@ Let’s convert our RoBERTa model to the ONNX format and re-run the memory profi
 
 Neither the peak memory consumption (~1.5GiB) nor the model size (500MB) are dramatically reduced, but the runtime for CPU inference has decreased dramatically from 20s to 6s.
 
-PyTorch also provides native [serialization using TorchScript](pytorch.org/docs/stable/jit.html). There are two types of serialization - scripting and tracing. During tracing, sample input is fed into the trained model and followed (traced) through the model computation graph, which is then frozen. At the time of this writing, only tracing is supported for transformer models, so that is the method we will use:
+PyTorch also provides native [serialization using TorchScript](https://pytorch.org/docs/stable/jit.html). There are two types of serialization - scripting and tracing. During tracing, sample input is fed into the trained model and followed (traced) through the model computation graph, which is then frozen. At the time of this writing, only tracing is supported for transformer models, so that is the method we will use:
 
     import model_utils
 
