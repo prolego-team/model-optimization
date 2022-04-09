@@ -10,6 +10,8 @@ It is my goal to help you understand the basic choices that exist around model c
 
 So with that, let’s get started…
 
+> TL;DR: For most middle-of-the-road scenarios, I would generally recommend an approach that balances speed and compute gains with ease of implementation: With the currently available tools and libraries, you’re going to get the most bang for your buck by simply performing ONNX serialization and quantization on your models, and potentially using a smaller model architecture like DistilBERT if the performance hit is acceptable.
+
 ## What is Model Compression?
 
 Model compression refers to the practice of modifying model loading/storage to decrease the resource usage and/or improve the latency for that model. For deep learning models, we should ask ourselves three basic questions:
@@ -63,7 +65,7 @@ Let’s convert our RoBERTa model to the ONNX format and re-run the memory profi
 
 Neither the peak memory consumption (~1.5GiB) nor the model size (500MB) are dramatically reduced, but the runtime for CPU inference has decreased dramatically from 20s to 6s.
 
-PyTorch also provides native [serialization using TorchScript](pytorch.org/docs/stable/jit.html). There are two types of serialization - scripting and tracing. During tracing, sample input is fed into the trained model and followed (traced) through the model computation graph, which is then frozen. At the time of this writing, only tracing is supported for transformer models, so that is the method we will use:
+PyTorch also provides native [serialization using TorchScript](https://pytorch.org/docs/stable/jit.html). There are two types of serialization - scripting and tracing. During tracing, sample input is fed into the trained model and followed (traced) through the model computation graph, which is then frozen. At the time of this writing, only tracing is supported for transformer models, so that is the method we will use:
 
     import model_utils
 
@@ -277,7 +279,6 @@ In the chart below, I show the results of applying these techniques sequentially
 
 ONNX serialization has substantially decreased inference time without changing model predictions. Quantization has decreased hard disk usage, as well as further reduced inference time. As we saw previously, we can expect quantization to somewhat impact model predictions, though likely not substantially. Using a smaller architecture like DistilRoBERTa further reduces hard disk usage and inference time. However, it requires model training/retraining using a different architecture, which has the potential to substantially impact model metrics. The extent of the impact is likely data-dependent, so we would need to test with a specific use-case/dataset to determine the impact. Compared to these three techniques, pruning is a method I would recommend only in extreme situations where it is critical to eke out slightly better performance - while we do see some gains compared with simply using the DistilRoBERTa model, it is substantially more effort to implement an intelligent strategy for determining which heads to prune than to, say, swap in a DistilBERT foundation model rather than a BERT model.
 
-TLDR: For most middle-of-the-road scenarios, I would generally recommend an approach that balances speed and compute gains with ease of implementation: With the currently available tools and libraries, you’re going to get the most bang for your buck by simply performing ONNX serialization and quantization on your models, and potentially using a smaller model architecture like DistilBERT if the performance hit is acceptable.
 
 ## Conclusion
 
