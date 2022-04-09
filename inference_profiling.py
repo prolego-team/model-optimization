@@ -77,7 +77,8 @@ def main(model_name: str):
             output_dir=tmp_dir,
             do_train=False,
             do_eval=False,
-            do_predict=True
+            do_predict=True,
+            per_device_eval_batch_size=1
         )
         trainer = Trainer(
             model=model,
